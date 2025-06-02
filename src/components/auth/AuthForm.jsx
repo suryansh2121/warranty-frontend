@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { GoogleLogin } from '@react-oauth/google';
-import api from '../../services/api';
+import { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import api from "../../services/api";
 
 function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -20,10 +20,10 @@ function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
   const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true);
     try {
-      const response = await api.post('/api/auth/google', {
+      const response = await api.post("/api/auth/google", {
         token: credentialResponse.credential,
       });
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem("token", response.data.token);
       window.location.reload();
     } finally {
       setLoading(false);
@@ -44,7 +44,9 @@ function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
           />
         </div>
         <div>
-          <label className="block mb-1 font-medium text-gray-700">Password</label>
+          <label className="block mb-1 font-medium text-gray-700">
+            Password
+          </label>
           <input
             type="password"
             value={password}
@@ -58,14 +60,14 @@ function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
           className="bg-blue-600 text-white p-3 rounded-lg w-full hover:bg-blue-700 transition"
           disabled={loading}
         >
-          {loading ? 'Submitting...' : submitText}
+          {loading ? "Submitting..." : submitText}
         </button>
       </form>
       {showGoogleLogin && (
         <div className="mt-4 flex justify-center">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => alert('Google login failed')}
+            onError={() => alert("Google login failed")}
           />
         </div>
       )}
