@@ -63,14 +63,14 @@ function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
           {loading ? "Submitting..." : submitText}
         </button>
       </form>
-      {showGoogleLogin && (
+      {/* {showGoogleLogin && (
         <div className="mt-4 flex justify-center">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => alert("Google login failed")}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
