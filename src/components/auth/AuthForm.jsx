@@ -1,34 +1,48 @@
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 
 function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await onSubmit(email, password);
+      const res = await onSubmit(email, password);
+      if (res?.token) {
+        localStorage.setItem("token", res.token);
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      alert("Login failed",err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
-    try {
-      const response = await api.post("/api/auth/google", {
-        token: credentialResponse.credential,
-      });
-      localStorage.setItem("token", response.data.token);
-      window.location.reload();
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    console.log("Google Login Success: Starting backend request");
+    const response = await api.post("/api/auth/google", {
+      token: credentialResponse.credential,
+    });
+    console.log("Backend Response:", response.data);
+    localStorage.setItem("token", response.data.token);
+    console.log("Token stored, navigating to /dashboard");
+    navigate("/dashboard");
+  } catch (err) {
+    console.error("Google login failed:", err);
+    alert("Google login failed: " + err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="container mx-auto p-6">
@@ -44,9 +58,7 @@ function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
           />
         </div>
         <div>
-          <label className="block mb-1 font-medium text-gray-700">
-            Password
-          </label>
+          <label className="block mb-1 font-medium text-gray-700">Password</label>
           <input
             type="password"
             value={password}
@@ -63,14 +75,15 @@ function AuthForm({ onSubmit, submitText, showGoogleLogin = false }) {
           {loading ? "Submitting..." : submitText}
         </button>
       </form>
-      {/* {showGoogleLogin && (
+
+      {showGoogleLogin && (
         <div className="mt-4 flex justify-center">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => alert("Google login failed")}
           />
         </div>
-      )} */}
+      )}
     </div>
   );
 }
