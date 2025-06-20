@@ -2,24 +2,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaTools } from "react-icons/fa";
-import Tilt from "react-parallax-tilt"; 
-import Particles from "react-tsparticles"; 
-import { loadFull } from "tsparticles"; 
+import Tilt from "react-parallax-tilt";
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 
 const Welcome = () => {
-  // Particle initialization
   const particlesInit = async (main) => {
     await loadFull(main);
   };
 
-  // Particle configuration
   const particlesConfig = {
     particles: {
-      number: { value: 50, density: { enable: true, value_area: 800 } },
+      number: { value: 50, density: { enable: true, value_area: 1500 } },
       color: { value: ["#FFD700", "#FF69B4", "#4B0082"] },
       shape: { type: "circle" },
-      opacity: { value: 0.5, random: true },
-      size: { value: 3, random: true },
+      opacity: { value: 0.7 },
+      size: { value: 4 },
+
       move: {
         enable: true,
         speed: 2,
@@ -38,7 +37,6 @@ const Welcome = () => {
     },
   };
 
-  // Animation variants for staggered children
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -55,28 +53,13 @@ const Welcome = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-600 text-white flex justify-center items-center px-4 relative overflow-hidden">
-      {/* Particle Background */}
       <Particles
         id="tsparticles"
         init={particlesInit}
         options={particlesConfig}
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-[5] pointer-events-none"
       />
 
-      {/* Optional Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        className="absolute inset-0 w-full h-full object-cover opacity-20 z-0"
-      >
-        <source
-          src="https://assets.mixkit.co/videos/preview/mixkit-abstract-background-of-colored-lines-moving-1409-large.mp4"
-          type="video/mp4"
-        />
-      </video>
-
-      {/* SVG Blob Decoration */}
       <div className="absolute top-0 left-0 transform -translate-x-1/3 -translate-y-1/3 z-0">
         <svg width="500" height="500" viewBox="0 0 200 200" fill="none">
           <path
@@ -88,14 +71,13 @@ const Welcome = () => {
         </svg>
       </div>
 
-      {/* Frosted Glass Container with 3D Tilt */}
       <Tilt
         tiltMaxAngleX={15}
         tiltMaxAngleY={15}
         perspective={1000}
         scale={1.02}
         transitionSpeed={2000}
-        className="z-10"
+        className="z-[10]"
       >
         <motion.div
           variants={containerVariants}
@@ -103,7 +85,6 @@ const Welcome = () => {
           animate="visible"
           className="backdrop-blur-lg bg-white/10 rounded-3xl p-8 md:p-12 max-w-4xl text-center shadow-2xl border border-white/20"
         >
-          {/* Animated Icon */}
           <motion.div
             variants={childVariants}
             className="flex justify-center mb-6"
@@ -112,7 +93,6 @@ const Welcome = () => {
             <FaTools className="text-7xl text-yellow-300 drop-shadow-2xl" />
           </motion.div>
 
-          {/* Title with Gradient and Glow */}
           <motion.h1
             variants={childVariants}
             className="text-5xl sm:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-pink-400 to-red-400 drop-shadow-lg"
@@ -120,15 +100,14 @@ const Welcome = () => {
             Welcome to Warranty Pro
           </motion.h1>
 
-          {/* Subtitle with Enhanced Styling */}
           <motion.p
             variants={childVariants}
             className="text-lg sm:text-2xl mb-8 text-white/85 font-light leading-relaxed max-w-2xl mx-auto"
           >
-            Discover the ultimate solution to manage and track your product warranties with unparalleled ease and style.
+            Discover the ultimate solution to manage and track your product
+            warranties with unparalleled ease and style.
           </motion.p>
 
-          {/* Buttons with Advanced Hover Effects */}
           <motion.div
             variants={childVariants}
             className="flex flex-wrap justify-center gap-4"
@@ -147,7 +126,6 @@ const Welcome = () => {
             </Link>
           </motion.div>
 
-          {/* Social Proof with Animation */}
           <motion.p
             variants={childVariants}
             className="mt-6 text-sm text-white/70"
@@ -156,28 +134,6 @@ const Welcome = () => {
           </motion.p>
         </motion.div>
       </Tilt>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-8 text-white/60"
-        animate={{ y: [0, 15, 0] }}
-        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-      >
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
-      </motion.div>
     </div>
   );
 };
