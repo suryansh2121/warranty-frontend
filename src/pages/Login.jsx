@@ -1,27 +1,116 @@
-import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { AuthContext } from '../context/AuthContext';
-import AuthForm from '../components/auth/AuthForm';
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import Particles from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+import { motion } from "framer-motion";
+import { FaLock, FaSpinner } from "react-icons/fa";
+import AuthForm from "../components/auth/AuthForm";
 
 function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (email, password) => {
+    if (!email || !password) {
+      toast.error("Please enter both email and password");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       await login(email, password);
-      toast.success('Login successful!');
-      navigate('/dashboard');
+      toast.success("Login successful!", { position: "top-right" });
+      navigate("/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed');
+      toast.error(err.response?.data?.message || "Login failed", {
+        position: "top-right",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  
+  const particlesInit = async (engine) => {
+    await loadSlim(engine);
+  };
+
+  
+  const particlesOptions = {
+    fullScreen: { enable: false },
+    particles: {
+      number: { value: 60, density: { enable: true, area: 1200 } },
+      color: { value: ["#FFD700", "#FF69B4", "#4B0082"] },
+      shape: { type: "circle" },
+      opacity: { value: { min: 0.4, max: 0.8 } },
+      size: { value: { min: 1, max: 4 } },
+      move: {
+        enable: true,
+        speed: { min: 1, max: 3 },
+        direction: "none",
+        outModes: { default: "out" },
+      },
+    },
+    interactivity: {
+      events: {
+        onHover: { enable: true, mode: "repulse" },
+        onClick: { enable: true, mode: "push" },
+      },
+      modes: { repulse: { distance: 150 }, push: { quantity: 4 } },
+    },
+    background: { color: "transparent" },
+    detectRetina: true,
+  };
+
+ 
+  const formVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  };
+
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login</h2>
-      <AuthForm onSubmit={handleSubmit} submitText="Login" showGoogleLogin={true} />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-600 relative overflow-hidden px-4 sm:px-6 lg:px-8">
+      
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={particlesOptions}
+        className="absolute inset-0 z-0"
+      />
+
+      
+      <motion.div
+        className="z-10 w-full max-w-md rounded-2xl p-6 shadow-2xl"
+        variants={formVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="text-center mb-4">
+          <FaLock className="text-4xl text-yellow-300 mx-auto mb-2 animate-pulse" />
+          <h2 className="text-3xl font-extrabold text-white">Welcome Back</h2>
+          <p className="text-white/70 mt-2 text-sm">
+            Securely access your warranty dashboard
+          </p>
+        </div>
+
+        
+        <AuthForm
+          onSubmit={handleSubmit}
+          submitText={isLoading ? "Logging in..." : "Login"}
+          showGoogleLogin={true}
+          disabled={isLoading}
+        />
+
+        
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl">
+            <FaSpinner className="text-3xl text-yellow-300 animate-spin" />
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 }
