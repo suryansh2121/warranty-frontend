@@ -7,6 +7,12 @@ import { z } from "zod";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import api from "../../services/api";
 
+import { useAuth } from "../../context/AuthContext";
+
+
+
+
+
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -14,7 +20,7 @@ const loginSchema = z.object({
     .string()
     .min(6, "Password must be at least 6 characters")
     .max(50, "Password must be less than 50 characters"),
-});
+  });
 
 function AuthForm({
   onSubmit,
@@ -22,6 +28,7 @@ function AuthForm({
   showGoogleLogin = false,
   disabled = false,
 }) {
+  const {loginGoogle} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -73,23 +80,12 @@ function AuthForm({
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
-    try {
-      const response = await api.post("/api/auth/google", {
-        token: credentialResponse.credential,
-      });
-      localStorage.setItem("token", response.data.token);
-      toast.success("Google login successful!", { position: "top-right" });
-      navigate("/dashboard");
-    } catch (err) {
-      toast.error("Google login failed: " + err.message, {
-        position: "top-right",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+ const handleGoogleSuccess = async (credentialResponse) => {
+  setLoading(true);
+  await loginGoogle(credentialResponse.credential);
+  setLoading(false);
+};
+
   const formVariants = {
     hidden: { opacity: 0, scale: 0.95 },
     visible: {

@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     if (token) {
       api
-        .get("/auth/me")
+        .get("api/auth/me")
         .then((res) => {
           setUser(res.data.user);
         })
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
       console.log("signup failed", err);
     }
   };
-  const loginWithGoogle = async (googleToken) => {
+  const loginGoogle = async (googleToken) => {
     try {
       const res = await loginWithGoogleAPI(googleToken);
       const { token, user } = res.data;
@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }) => {
         login,
         signup,
         logout,
-        loginWithGoogle,
+        loginGoogle,
         isAuthenticated,
       }}
     >

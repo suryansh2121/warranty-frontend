@@ -107,7 +107,7 @@ function Login() {
         
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl">
-            <FaSpinner className="text-3xl text-yellow-300 animate-spin" />
+           
           </div>
         )}
       </motion.div>
