@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
 import api from "../services/api";
 import Spinner from "../components/Spinner";
@@ -6,19 +6,36 @@ import WarrantyCard from "../components/warranty/WarrantyCard";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import { motion } from "framer-motion";
+import { AuthContext } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import Tilt from "react-parallax-tilt"; 
 import {
   FaRegClock,
   FaCheckCircle,
   FaExclamationCircle,
+  FaPlus,
+  FaSignOutAlt,
+  FaSearch,
 } from "react-icons/fa";
 
+
 const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
   visible: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.2, duration: 0.5 },
+    scale: 1,
+    transition: { delay: i * 0.1, duration: 0.6, ease: "easeOut" },
   }),
+};
+
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2, duration: 0.8 },
+  },
 };
 
 function Dashboard() {
@@ -29,26 +46,45 @@ function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [warrantyToDelete, setWarrantyToDelete] = useState(null);
 
-  const summary = [
-    {
-      title: "Active Warranties",
-      count: 12,
-      icon: <FaCheckCircle className="text-green-400 text-3xl" />,
-      bg: "bg-green-100/10 border-green-300/30",
-    },
-    {
-      title: "Expired",
-      count: 5,
-      icon: <FaExclamationCircle className="text-red-400 text-3xl" />,
-      bg: "bg-red-100/10 border-red-300/30",
-    },
-    {
-      title: "Upcoming Expiry",
-      count: 3,
-      icon: <FaRegClock className="text-yellow-400 text-3xl" />,
-      bg: "bg-yellow-100/10 border-yellow-300/30",
-    },
-  ];
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+const expired = warranties.filter(w => new Date(w.warrantyExpiryDate) < new Date()).length;
+const upcoming = warranties.filter(w => {
+  const expiry = new Date(w.warrantyExpiryDate);
+  const now = new Date();
+  const in7Days = new Date();
+  in7Days.setDate(now.getDate() + 7);
+  return expiry >= now && expiry <= in7Days;
+}).length;
+const active = warranties.length - expired;
+
+const summary = [
+  {
+    title: "Active Warranties",
+    count: active,
+    icon: <FaCheckCircle className="text-green-400 text-4xl drop-shadow-lg" />,
+    bg: "bg-green-500/10 border-green-400/20 hover:bg-green-500/20",
+  },
+  {
+    title: "Expired",
+    count: expired,
+    icon: <FaExclamationCircle className="text-red-400 text-4xl drop-shadow-lg" />,
+    bg: "bg-red-500/10 border-red-400/20 hover:bg-red-500/20",
+  },
+  {
+    title: "Upcoming Expiry",
+    count: upcoming,
+    icon: <FaRegClock className="text-yellow-400 text-4xl drop-shadow-lg" />,
+    bg: "bg-yellow-500/10 border-yellow-400/20 hover:bg-yellow-500/20",
+  },
+];
+
 
   useEffect(() => {
     fetchWarranties();
@@ -60,19 +96,23 @@ function Dashboard() {
       const response = await api.get("/api/warranty");
       setWarranties(response.data);
     } catch (err) {
-      toast.error("Failed to fetch warranties", err.massage);
+      toast.error("Failed to fetch warranties");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSearch = async () => {
+    if (!search.trim()) {
+    toast.error("Search query cannot be empty");
+    return;
+  }
     setLoading(true);
     try {
       const response = await api.get(`/api/warranty/search?q=${search}`);
       setWarranties(response.data);
     } catch (err) {
-      toast.error("Search failed",err.massage);
+      toast.error("Search failed");
     } finally {
       setLoading(false);
     }
@@ -102,7 +142,7 @@ function Dashboard() {
       setWarranties((prev) => prev.filter((w) => w._id !== warrantyToDelete));
       toast.success("Warranty deleted successfully");
     } catch (err) {
-      toast.error("Failed to delete warranty", err.massage);
+      toast.error("Failed to delete warranty");
     } finally {
       setLoading(false);
       setShowModal(false);
@@ -110,138 +150,205 @@ function Dashboard() {
     }
   };
 
+  
   const particlesInit = async (main) => {
     await loadFull(main);
   };
 
+  
   const particlesOptions = {
     fullScreen: { enable: false },
     particles: {
-      number: { value: 40, density: { enable: true, value_area: 800 } },
-      color: { value: "#ffffff" },
+      number: { value: 60, density: { enable: true, value_area: 1000 } },
+      color: { value: ["#FFD700", "#FF69B4", "#4B0082"] },
       shape: { type: "circle" },
-      opacity: { value: 0.2 },
-      size: { value: 2, random: true },
+      opacity: { value: 0.3, random: true },
+      size: { value: 2, random: { enable: true, minimumValue: 1 } },
       move: {
         enable: true,
-        speed: 0.8,
+        speed: 1.5,
         direction: "none",
+        random: true,
+        straight: false,
         out_mode: "out",
       },
+    },
+    interactivity: {
+      events: {
+        onhover: { enable: true, mode: "repulse" },
+        onclick: { enable: true, mode: "push" },
+      },
+      modes: { repulse: { distance: 100 }, push: { particles_nb: 3 } },
     },
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-800 text-white overflow-hidden p-4 sm:p-6">
+    <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 text-white overflow-hidden p-4 sm:p-8">
+
       <Particles
         init={particlesInit}
         options={particlesOptions}
         className="absolute inset-0 z-0 pointer-events-none"
       />
 
-      <div className="relative z-10 backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl p-6 shadow-2xl max-w-7xl mx-auto">
-        
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <h1 className="text-4xl font-bold">Welcome back, Suryansh 👋</h1>
-          <p className="text-white/70 mt-1">Here’s what’s happening with your warranties.</p>
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise.png')] opacity-10 z-0" />
+
+      
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="flex justify-between items-center mb-8 relative z-10"
+      >
+        <h1 className="text-3xl sm:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-pink-400">
+          Warranty Dashboard
+        </h1>
+      <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 items-center">
+
+          {user && (
+            <>
+              <Link
+                to="/create"
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 px-5 py-2.5 rounded-full shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:-translate-y-1"
+                aria-label="Add new warranty"
+              >
+                <FaPlus /> Add Warranty
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 px-5 py-2.5 rounded-full shadow-lg hover:shadow-red-500/50 transition-all duration-300 transform hover:-translate-y-1"
+                aria-label="Log out"
+              >
+                <FaSignOutAlt /> Logout
+              </button>
+            </>
+          )}
+        </div>
+      </motion.div>
+
+      
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 shadow-2xl max-w-7xl mx-auto"
+      >
+        <motion.div variants={cardVariants} className="mb-10">
+          <h2 className="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-pink-300">
+            Welcome back, {user?.name || "User"} 👋
+          </h2>
+          <p className="text-white/60 mt-2 text-lg">
+            Monitor and manage your warranties with ease.
+          </p>
         </motion.div>
 
-     
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-3 mb-10">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-3 mb-12">
           {summary.map((item, i) => (
-            <motion.div
-              key={i}
-              custom={i}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className={`p-6 rounded-xl border shadow-lg ${item.bg}`}
-            >
-              <div className="flex items-center gap-4">
-                <div>{item.icon}</div>
-                <div>
-                  <h2 className="text-xl font-semibold">{item.title}</h2>
-                  <p className="text-3xl font-bold mt-1">{item.count}</p>
+            <Tilt key={i} tiltMaxAngleX={10} tiltMaxAngleY={10} scale={1.05}>
+              <motion.div
+                custom={i}
+                variants={cardVariants}
+                className={`p-6 rounded-xl border backdrop-blur-md ${item.bg} transition-all duration-300 transform hover:scale-105`}
+              >
+                <div className="flex items-center gap-4">
+                  <div>{item.icon}</div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white/90">{item.title}</h3>
+                    <p className="text-4xl font-bold mt-1 text-white">{item.count}</p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Tilt>
           ))}
         </div>
 
-    
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
-          <div className="flex-grow mb-4 sm:mb-0">
+        
+        <motion.div variants={cardVariants} className="mb-8 flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
+
+          <div className="flex-grow mb-4 sm:mb-0 relative">
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by product or serial number"
-              className="w-full p-3 bg-white/80 text-gray-800 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-3 bg-white/10 text-white rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white/50"
             />
           </div>
           <button
             onClick={handleSearch}
-            className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-5 py-3 rounded-lg transition shadow"
+            className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-gray-900 font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-yellow-500/50 transition-all duration-300"
           >
             Search
           </button>
           <select
             onChange={(e) => handleSort(e.target.value)}
-            className="p-3 bg-white/80 text-gray-800 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 bg-white/10 text-white rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
           >
-            <option value="">Sort By</option>
-            <option value="productName">Product Name</option>
-            <option value="expiry">Expiry Date</option>
+            <option value="" className="bg-gray-800">Sort By</option>
+            <option value="productName" className="bg-gray-800">Product Name</option>
+            <option value="expiry" className="bg-gray-800">Expiry Date</option>
           </select>
-        </div>
+        </motion.div>
 
         
         {loading && <Spinner />}
         {!loading && warranties.length === 0 && (
-          <p className="text-white/70">No warranties found. Add one to get started!</p>
+          <motion.p
+            variants={cardVariants}
+            className="text-white/60 text-center text-lg"
+          >
+            No warranties found. Add one to get started!
+          </motion.p>
         )}
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {warranties.map((warranty) => (
-            <WarrantyCard
-              key={warranty._id}
-              warranty={warranty}
-              onDelete={handleDeleteClick}
-            />
+          {warranties.map((warranty, i) => (
+            <Tilt key={warranty._id} tiltMaxAngleX={8} tiltMaxAngleY={8} scale={1.03}>
+              <motion.div
+                custom={i}
+                variants={cardVariants}
+                className="transform transition-all duration-300"
+              >
+                <WarrantyCard
+                  warranty={warranty}
+                  onDelete={handleDeleteClick}
+                />
+              </motion.div>
+            </Tilt>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-   
+    
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-gray-800">
-            <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-            <p className="mb-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+        >
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-2xl max-w-md w-full text-white">
+            <h3 className="text-xl font-semibold mb-4">Confirm Deletion</h3>
+            <p className="mb-6 text-white/80">
               Are you sure you want to delete this warranty? This action cannot be undone.
             </p>
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+                className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full transition"
                 disabled={loading}
               >
                 Delete
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
