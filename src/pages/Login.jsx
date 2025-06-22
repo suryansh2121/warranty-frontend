@@ -2,8 +2,6 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import Particles from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
 import { motion } from "framer-motion";
 import { FaLock, FaSpinner } from "react-icons/fa";
 import AuthForm from "../components/auth/AuthForm";
@@ -34,36 +32,7 @@ function Login() {
   };
 
   
-  const particlesInit = async (engine) => {
-    await loadSlim(engine);
-  };
-
-  
-  const particlesOptions = {
-    fullScreen: { enable: false },
-    particles: {
-      number: { value: 60, density: { enable: true, area: 1200 } },
-      color: { value: ["#FFD700", "#FF69B4", "#4B0082"] },
-      shape: { type: "circle" },
-      opacity: { value: { min: 0.4, max: 0.8 } },
-      size: { value: { min: 1, max: 4 } },
-      move: {
-        enable: true,
-        speed: { min: 1, max: 3 },
-        direction: "none",
-        outModes: { default: "out" },
-      },
-    },
-    interactivity: {
-      events: {
-        onHover: { enable: true, mode: "repulse" },
-        onClick: { enable: true, mode: "push" },
-      },
-      modes: { repulse: { distance: 150 }, push: { quantity: 4 } },
-    },
-    background: { color: "transparent" },
-    detectRetina: true,
-  };
+ 
 
  
   const formVariants = {
@@ -74,13 +43,7 @@ function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-600 relative overflow-hidden px-4 sm:px-6 lg:px-8">
       
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={particlesOptions}
-        className="absolute inset-0 z-0"
-      />
-
+      
       
       <motion.div
         className="z-10 w-full max-w-md rounded-2xl p-6 shadow-2xl"

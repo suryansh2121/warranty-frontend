@@ -15,13 +15,14 @@ import Dashboard from "./pages/Dashboard";
 import CreateWarranty from "./pages/CreateWarranty";
 import EditWarranty from "./pages/EditWarranty";
 import Welcome from "./pages/Welcome";
+import Spinner from "./components/Spinner";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
-        Loading...
+        <Spinner/>
       </div>
     );
   if (!user) return <Navigate to="/login" />;

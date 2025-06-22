@@ -3,8 +3,6 @@ import { toast } from "react-toastify";
 import api from "../services/api";
 import Spinner from "../components/Spinner";
 import WarrantyCard from "../components/warranty/WarrantyCard";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -151,45 +149,11 @@ const summary = [
   };
 
   
-  const particlesInit = async (main) => {
-    await loadFull(main);
-  };
-
-  
-  const particlesOptions = {
-    fullScreen: { enable: false },
-    particles: {
-      number: { value: 60, density: { enable: true, value_area: 1000 } },
-      color: { value: ["#FFD700", "#FF69B4", "#4B0082"] },
-      shape: { type: "circle" },
-      opacity: { value: 0.3, random: true },
-      size: { value: 2, random: { enable: true, minimumValue: 1 } },
-      move: {
-        enable: true,
-        speed: 1.5,
-        direction: "none",
-        random: true,
-        straight: false,
-        out_mode: "out",
-      },
-    },
-    interactivity: {
-      events: {
-        onhover: { enable: true, mode: "repulse" },
-        onclick: { enable: true, mode: "push" },
-      },
-      modes: { repulse: { distance: 100 }, push: { particles_nb: 3 } },
-    },
-  };
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 text-white overflow-hidden p-4 sm:p-8">
 
-      <Particles
-        init={particlesInit}
-        options={particlesOptions}
-        className="absolute inset-0 z-0 pointer-events-none"
-      />
+    
 
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise.png')] opacity-10 z-0" />
 
