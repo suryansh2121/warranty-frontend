@@ -31,20 +31,17 @@ function Login() {
     }
   };
 
-  
- 
-
- 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-600 relative overflow-hidden px-4 sm:px-6 lg:px-8">
-      
-      
-      
       <motion.div
         className="z-10 w-full max-w-md rounded-2xl p-6 shadow-2xl"
         variants={formVariants}
@@ -59,19 +56,24 @@ function Login() {
           </p>
         </div>
 
-        
         <AuthForm
           onSubmit={handleSubmit}
           submitText={isLoading ? "Logging in..." : "Login"}
           showGoogleLogin={true}
           disabled={isLoading}
         />
+        <p className="text-sm text-white/70 mt-4 text-center">
+          New user?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-yellow-300 hover:underline cursor-pointer"
+          >
+            Create Account
+          </span>
+        </p>
 
-        
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl">
-           
-          </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl"></div>
         )}
       </motion.div>
     </div>
