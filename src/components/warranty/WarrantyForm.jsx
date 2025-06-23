@@ -29,6 +29,7 @@ function WarrantyForm({ initailData = {}, onSubmit, loading, submitText }) {
       : "",
     invoiceNumber: initailData.invoiceNumber || "",
     userEmail: initailData.userEmail || "",
+    warrantyDuration: initailData.warrantyDuration || "",
     supportContactInfo: initailData.supportContactInfo || {
       phone: "",
       email: "",
@@ -50,13 +51,13 @@ function WarrantyForm({ initailData = {}, onSubmit, loading, submitText }) {
     }
   };
   const handleFileChange = (e) => {
-    setFile(e.target.file[0]);
+    setFile(e.target.file?.[0]);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData();
-    object.keys(formData).foreach((key) => {
+    Object.keys(formData).forEach((key) => {
       if (key === "supportContactInfo") {
         data.append(key, JSON.stringify(formData[key]));
       } else {
