@@ -19,23 +19,23 @@ const fieldVariants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
 };
 
-function WarrantyForm({ initailData = {}, onSubmit, loading, submitText }) {
+function WarrantyForm({ initialData = {}, onSubmit, loading, submitText }) {
   const [formData, setFormData] = useState({
-    productName: initailData.productName || "",
-    brandAndModel: initailData.brandAndModel || "",
-    serialNumber: initailData.serialNumber || "",
-    purchaseDate: initailData.purchaseDate
-      ? initailData.purchaseDate.split("T")[0]
+    productName: initialData.productName || "",
+    brandAndModel: initialData.brandAndModel || "",
+    serialNumber: initialData.serialNumber || "",
+    purchaseDate: initialData.purchaseDate
+      ? initialData.purchaseDate.split("T")[0]
       : "",
-    invoiceNumber: initailData.invoiceNumber || "",
-    userEmail: initailData.userEmail || "",
-    warrantyDuration: initailData.warrantyDuration || "",
-    supportContactInfo: initailData.supportContactInfo || {
+    invoiceNumber: initialData.invoiceNumber || "",
+    userEmail: initialData.userEmail || "",
+    warrantyDuration: initialData.warrantyDuration || "",
+    supportContactInfo: initialData.supportContactInfo || {
       phone: "",
       email: "",
       website: "",
     },
-    notes: initailData.notes || "",
+    notes: initialData.notes || "",
   });
   const [file, setFile] = useState(null);
 
