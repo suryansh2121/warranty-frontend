@@ -16,6 +16,7 @@ import CreateWarranty from "./pages/CreateWarranty";
 import EditWarranty from "./pages/EditWarranty";
 import Welcome from "./pages/Welcome";
 import Spinner from "./components/Spinner";
+import WarrantyDetails from "./pages/WarrantyDetails";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -59,6 +60,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditWarranty />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path= "/warranty/:id"
+            element={
+              <ProtectedRoute>
+                <WarrantyDetails />
               </ProtectedRoute>
             }
           />

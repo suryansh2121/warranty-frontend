@@ -21,7 +21,7 @@ function WarrantyCard({ warranty, onDelete }) {
   const support = warranty.supportContactInfo || {};
 
   return (
-    <div className="relative p-6 bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 backdrop-blur-lg bg-opacity-80 max-w-sm mx-auto">
+    <div className="relative p-6 bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-.5 backdrop-blur-lg bg-opacity-80 max-w-sm mx-auto">
       <div
         className={`absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-semibold tracking-wide ${
           daysUntilExpiry <= 30
@@ -31,6 +31,15 @@ function WarrantyCard({ warranty, onDelete }) {
       >
         {daysUntilExpiry > 0 ? `${daysUntilExpiry} days left` : `Expired`}
       </div>
+
+      <Link
+        to={`/warranty/${warranty._id}`}
+        className=" absolute -right-3 px-3 py-1 rounded-lg text-xs font-semibold tracking-wide text-black shadow-md bg-gradient-to-br from-red-100 to-red-600 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-100  transition-colors duration-200
+
+"
+      >
+        <button className="">View Details</button>
+      </Link>
 
       <h3 className="text-2xl font-extrabold text-gray-900 tracking-tight">
         {warranty.productName}
