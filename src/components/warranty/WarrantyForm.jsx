@@ -35,7 +35,7 @@ function WarrantyForm({ initialData = {}, onSubmit, loading, submitText }) {
       email: "",
       website: "",
     },
-    notes: initialData.notes || "",
+    
   });
   const [file, setFile] = useState(null);
 
@@ -51,7 +51,7 @@ function WarrantyForm({ initialData = {}, onSubmit, loading, submitText }) {
     }
   };
   const handleFileChange = (e) => {
-    setFile(e.target.file?.[0]);
+    setFile(e.target.files?.[0]);
   };
 
   const handleSubmit = (e) => {
@@ -249,21 +249,7 @@ function WarrantyForm({ initialData = {}, onSubmit, loading, submitText }) {
           />
         </div>
       </motion.div>
-      <motion.div variants={fieldVariants}>
-        <label className="block mb-1 font-medium text-white/80">Notes</label>
-        <div className="relative">
-          <FaStickyNote className="absolute left-4 top-4 text-yellow-300" />
-          <textarea
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            className="w-full pl-12 pr-4 py-3 bg-white/10 text-white rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white/50 transition-all hover:bg-white/15"
-            placeholder="Additional details or comments"
-            rows="4"
-            aria-label="Notes"
-          />
-        </div>
-      </motion.div>
+      
       <motion.div variants={fieldVariants}>
         <label className="block mb-1 font-medium text-white/80">
           Warranty Document

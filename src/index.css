@@ -17,3 +17,35 @@
 .animate-pulse-slow {
   animation: pulse-slow 4s infinite;
 }
+
+
+
+
+
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 5px rgba(0, 255, 255, 0.5), 0 0 10px rgba(0, 255, 255, 0.3); }
+  50% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.5); }
+}
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes slide-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+
+
+.animate-pulse-button {
+  animation: pulse 1.5s ease-in-out infinite;
+}
