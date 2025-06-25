@@ -18,6 +18,7 @@ import Welcome from "./pages/Welcome";
 import Spinner from "./components/Spinner";
 import WarrantyDetails from "./pages/WarrantyDetails";
 
+
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   if (loading)

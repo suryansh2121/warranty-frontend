@@ -9,18 +9,13 @@ import api from "../../services/api";
 
 import { useAuth } from "../../context/AuthContext";
 
-
-
-
-
-
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z
     .string()
     .min(6, "Password must be at least 6 characters")
     .max(50, "Password must be less than 50 characters"),
-  });
+});
 
 function AuthForm({
   onSubmit,
@@ -28,7 +23,7 @@ function AuthForm({
   showGoogleLogin = false,
   disabled = false,
 }) {
-  const {loginGoogle} = useAuth();
+  const { loginGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -80,11 +75,11 @@ function AuthForm({
     }
   };
 
- const handleGoogleSuccess = async (credentialResponse) => {
-  setLoading(true);
-  await loginGoogle(credentialResponse.credential);
-  setLoading(false);
-};
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    await loginGoogle(credentialResponse.credential);
+    setLoading(false);
+  };
 
   const formVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -121,32 +116,34 @@ function AuthForm({
         )}
       </AnimatePresence>
       <div>
-  <label htmlFor="email" className="block mb-2 font-semibold text-white/90">
-    Email
-  </label>
-  <motion.div variants={inputVariants} whileFocus="focus">
-    <input
-      id="email"
-      name="email" 
-      type="email"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      className={`w-full p-3 rounded-lg bg-white/20 placeholder-white/60 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 ${
-        errors.email ? "border-red-500" : ""
-      }`}
-      placeholder="Enter your email"
-      disabled={loading || disabled}
-      required
-      autoComplete="email" 
-    />
-  </motion.div>
-  {errors.email && (
-    <p className="text-red-400 text-sm mt-1 animate-pulse">
-      {errors.email}
-    </p>
-  )}
-</div>
-
+        <label
+          htmlFor="email"
+          className="block mb-2 font-semibold text-white/90"
+        >
+          Email
+        </label>
+        <motion.div variants={inputVariants} whileFocus="focus">
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`w-full p-3 rounded-lg bg-white/20 placeholder-white/60 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 ${
+              errors.email ? "border-red-500" : ""
+            }`}
+            placeholder="Enter your email"
+            disabled={loading || disabled}
+            required
+            autoComplete="email"
+          />
+        </motion.div>
+        {errors.email && (
+          <p className="text-red-400 text-sm mt-1 animate-pulse">
+            {errors.email}
+          </p>
+        )}
+      </div>
       <div>
         <label className="block mb-2 font-semibold text-white/90">
           Password
