@@ -195,7 +195,7 @@ function Dashboard() {
       >
         <motion.div variants={cardVariants} className="mb-10">
           <h2 className="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-pink-300">
-            Welcome back, {user?.name || "User"} 👋
+            Welcome back
           </h2>
           <p className="text-white/60 mt-2 text-lg">
             Monitor and manage your warranties with ease.

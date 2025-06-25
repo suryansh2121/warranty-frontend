@@ -47,7 +47,8 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       navigate("/dashboard", { replace: true });
     } catch (err) {
-      console.log("Login failed", err);
+      console.log("Login failed");
+      throw err;
     }
   };
 
@@ -60,6 +61,7 @@ export const AuthProvider = ({ children }) => {
       navigate("/dashboard");
     } catch (err) {
       console.log("signup failed", err);
+
     }
   };
   const loginGoogle = async (googleToken) => {
