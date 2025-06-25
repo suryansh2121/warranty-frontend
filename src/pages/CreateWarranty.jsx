@@ -45,7 +45,7 @@ function CreateWarranty() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 text-white flex items-center justify-center p-6 sm:p-12 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise.png')] opacity-15 z-0" />
+      <div className="absolute inset-0  opacity-15 z-0" />
       <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-indigo-500/10 rounded-full filter blur-3xl animate-pulse-slow" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-pink-500/10 rounded-full filter blur-3xl animate-pulse-slow" />
 

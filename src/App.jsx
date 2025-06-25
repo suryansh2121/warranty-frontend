@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children }) => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
-        <Spinner/>
+        <Spinner />
       </div>
     );
   if (!user) return <Navigate to="/login" />;
@@ -34,47 +34,46 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-      <div className="min-h-screen bg-gray-100">
-        
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/create"
-            element={
-              <ProtectedRoute>
-                <CreateWarranty />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/edit/:id"
-            element={
-              <ProtectedRoute>
-                <EditWarranty />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path= "/warranty/:id"
-            element={
-              <ProtectedRoute>
-                <WarrantyDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<Welcome />} />
-        </Routes>
-        <ToastContainer position="top-right" autoClose={3000} />
-      </div>
+        <div className="min-h-screen bg-gray-100">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create"
+              element={
+                <ProtectedRoute>
+                  <CreateWarranty />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <EditWarranty />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/warranty/:id"
+              element={
+                <ProtectedRoute>
+                  <WarrantyDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/" element={<Welcome />} />
+          </Routes>
+          <ToastContainer position="top-right" autoClose={3000} />
+        </div>
       </AuthProvider>
     </Router>
   );

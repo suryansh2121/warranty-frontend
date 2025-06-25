@@ -47,7 +47,7 @@ function EditWarranty() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 text-white flex items-center justify-center p-6 sm:p-12">
      
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise.png')] opacity-10 z-0" />
+      <div className="absolute inset-0  opacity-10 z-0" />
 
       
       <motion.div

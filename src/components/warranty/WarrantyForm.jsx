@@ -74,7 +74,7 @@ function WarrantyForm({ initialData = {}, onSubmit, loading, submitText }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       {loading && <Spinner />}
       <motion.div variants={fieldVariants}>
-        <label className="block mb-1 font-medium text-white/80">
+        <label  className="block mb-1 font-medium text-white/80">
           Product Name
         </label>
         <div className="relative">

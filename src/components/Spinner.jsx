@@ -28,7 +28,7 @@ const Spinner = () => {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise.png')] opacity-[0.07]" />
+      <div className="absolute inset-0  opacity-[0.07]" />
 
       <div className="absolute w-[250px] h-[250px] bg-yellow-300/20 rounded-full blur-3xl animate-ping -top-20 -left-20" />
       <div className="absolute w-[200px] h-[200px] bg-pink-400/20 rounded-full blur-3xl animate-ping-slow bottom-10 right-10" />

@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       const { token, user } = res.data;
       localStorage.setItem("token", token);
       setUser(user);
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       console.log("Login failed", err);
     }
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    setTimeout(() => navigate("/login"), 0);
+    setTimeout(() => navigate("/",{replace: true}), 0);
   };
 
   const isAuthenticated = !!user;

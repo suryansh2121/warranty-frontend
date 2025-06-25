@@ -6,7 +6,7 @@ import WarrantyCard from "../components/warranty/WarrantyCard";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import Tilt from "react-parallax-tilt"; 
+import Tilt from "react-parallax-tilt";
 import {
   FaRegClock,
   FaCheckCircle,
@@ -15,7 +15,6 @@ import {
   FaSignOutAlt,
   FaSearch,
 } from "react-icons/fa";
-
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50, scale: 0.95 },
@@ -26,7 +25,6 @@ const cardVariants = {
     transition: { delay: i * 0.1, duration: 0.6, ease: "easeOut" },
   }),
 };
-
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -52,37 +50,42 @@ function Dashboard() {
     navigate("/login");
   };
 
-const expired = warranties.filter(w => new Date(w.warrantyExpiryDate) < new Date()).length;
-const upcoming = warranties.filter(w => {
-  const expiry = new Date(w.warrantyExpiryDate);
-  const now = new Date();
-  const in7Days = new Date();
-  in7Days.setDate(now.getDate() + 7);
-  return expiry >= now && expiry <= in7Days;
-}).length;
-const active = warranties.length - expired;
+  const expired = warranties.filter(
+    (w) => new Date(w.warrantyExpiryDate) < new Date()
+  ).length;
+  const upcoming = warranties.filter((w) => {
+    const expiry = new Date(w.warrantyExpiryDate);
+    const now = new Date();
+    const in7Days = new Date();
+    in7Days.setDate(now.getDate() + 7);
+    return expiry >= now && expiry <= in7Days;
+  }).length;
+  const active = warranties.length - expired;
 
-const summary = [
-  {
-    title: "Active Warranties",
-    count: active,
-    icon: <FaCheckCircle className="text-green-400 text-4xl drop-shadow-lg" />,
-    bg: "bg-green-500/10 border-green-400/20 hover:bg-green-500/20",
-  },
-  {
-    title: "Expired",
-    count: expired,
-    icon: <FaExclamationCircle className="text-red-400 text-4xl drop-shadow-lg" />,
-    bg: "bg-red-500/10 border-red-400/20 hover:bg-red-500/20",
-  },
-  {
-    title: "Upcoming Expiry",
-    count: upcoming,
-    icon: <FaRegClock className="text-yellow-400 text-4xl drop-shadow-lg" />,
-    bg: "bg-yellow-500/10 border-yellow-400/20 hover:bg-yellow-500/20",
-  },
-];
-
+  const summary = [
+    {
+      title: "Active Warranties",
+      count: active,
+      icon: (
+        <FaCheckCircle className="text-green-400 text-4xl drop-shadow-lg" />
+      ),
+      bg: "bg-green-500/10 border-green-400/20 hover:bg-green-500/20",
+    },
+    {
+      title: "Expired",
+      count: expired,
+      icon: (
+        <FaExclamationCircle className="text-red-400 text-4xl drop-shadow-lg" />
+      ),
+      bg: "bg-red-500/10 border-red-400/20 hover:bg-red-500/20",
+    },
+    {
+      title: "Upcoming Expiry",
+      count: upcoming,
+      icon: <FaRegClock className="text-yellow-400 text-4xl drop-shadow-lg" />,
+      bg: "bg-yellow-500/10 border-yellow-400/20 hover:bg-yellow-500/20",
+    },
+  ];
 
   useEffect(() => {
     fetchWarranties();
@@ -102,9 +105,9 @@ const summary = [
 
   const handleSearch = async () => {
     if (!search.trim()) {
-    toast.error("Search query cannot be empty");
-    return;
-  }
+      toast.error("Search query cannot be empty");
+      return;
+    }
     setLoading(true);
     try {
       const response = await api.get(`/api/warranty/search?q=${search}`);
@@ -121,7 +124,9 @@ const summary = [
     setWarranties((prev) =>
       [...prev].sort((a, b) => {
         if (key === "expiry") {
-          return new Date(a.warrantyExpiryDate) - new Date(b.warrantyExpiryDate);
+          return (
+            new Date(a.warrantyExpiryDate) - new Date(b.warrantyExpiryDate)
+          );
         }
         return a[key].localeCompare(b[key]);
       })
@@ -148,16 +153,9 @@ const summary = [
     }
   };
 
-  
-
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 text-white overflow-hidden p-4 sm:p-8">
-
-    
-
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise.png')] opacity-10 z-0" />
-
-      
+      <div className="absolute inset-0  opacity-10 z-0" />
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -167,8 +165,7 @@ const summary = [
         <h1 className="text-3xl sm:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-pink-400">
           Warranty Dashboard
         </h1>
-      <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 items-center">
-
+        <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 items-center">
           {user && (
             <>
               <Link
@@ -190,7 +187,6 @@ const summary = [
         </div>
       </motion.div>
 
-      
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -217,8 +213,12 @@ const summary = [
                 <div className="flex items-center gap-4">
                   <div>{item.icon}</div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white/90">{item.title}</h3>
-                    <p className="text-4xl font-bold mt-1 text-white">{item.count}</p>
+                    <h3 className="text-lg font-semibold text-white/90">
+                      {item.title}
+                    </h3>
+                    <p className="text-4xl font-bold mt-1 text-white">
+                      {item.count}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -226,12 +226,14 @@ const summary = [
           ))}
         </div>
 
-        
-        <motion.div variants={cardVariants} className="mb-8 flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
-
+        <motion.div
+          variants={cardVariants}
+          className="mb-8 flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0"
+        >
           <div className="flex-grow mb-4 sm:mb-0 relative">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
+              id="search"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -249,13 +251,18 @@ const summary = [
             onChange={(e) => handleSort(e.target.value)}
             className="p-3 bg-white/10 text-white rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
           >
-            <option value="" className="bg-gray-800">Sort By</option>
-            <option value="productName" className="bg-gray-800">Product Name</option>
-            <option value="expiry" className="bg-gray-800">Expiry Date</option>
+            <option value="" className="bg-gray-800">
+              Sort By
+            </option>
+            <option value="productName" className="bg-gray-800">
+              Product Name
+            </option>
+            <option value="expiry" className="bg-gray-800">
+              Expiry Date
+            </option>
           </select>
         </motion.div>
 
-        
         {loading && <Spinner />}
         {!loading && warranties.length === 0 && (
           <motion.p
@@ -267,7 +274,12 @@ const summary = [
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {warranties.map((warranty, i) => (
-            <Tilt key={warranty._id} tiltMaxAngleX={8} tiltMaxAngleY={8} scale={1.03}>
+            <Tilt
+              key={warranty._id}
+              tiltMaxAngleX={8}
+              tiltMaxAngleY={8}
+              scale={1.03}
+            >
               <motion.div
                 custom={i}
                 variants={cardVariants}
@@ -283,7 +295,6 @@ const summary = [
         </div>
       </motion.div>
 
-    
       {showModal && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -294,7 +305,8 @@ const summary = [
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-2xl max-w-md w-full text-white">
             <h3 className="text-xl font-semibold mb-4">Confirm Deletion</h3>
             <p className="mb-6 text-white/80">
-              Are you sure you want to delete this warranty? This action cannot be undone.
+              Are you sure you want to delete this warranty? This action cannot
+              be undone.
             </p>
             <div className="flex justify-end space-x-4">
               <button

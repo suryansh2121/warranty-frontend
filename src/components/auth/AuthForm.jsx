@@ -121,26 +121,32 @@ function AuthForm({
         )}
       </AnimatePresence>
       <div>
-        <label className="block mb-2 font-semibold text-white/90">Email</label>
-        <motion.div variants={inputVariants} whileFocus="focus">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={`w-full p-3 rounded-lg bg-white/20 placeholder-white/60 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 ${
-              errors.email ? "border-red-500" : ""
-            }`}
-            placeholder="Enter your email"
-            disabled={loading || disabled}
-            required
-          />
-        </motion.div>
-        {errors.email && (
-          <p className="text-red-400 text-sm mt-1 animate-pulse">
-            {errors.email}
-          </p>
-        )}
-      </div>
+  <label htmlFor="email" className="block mb-2 font-semibold text-white/90">
+    Email
+  </label>
+  <motion.div variants={inputVariants} whileFocus="focus">
+    <input
+      id="email"
+      name="email" 
+      type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className={`w-full p-3 rounded-lg bg-white/20 placeholder-white/60 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 ${
+        errors.email ? "border-red-500" : ""
+      }`}
+      placeholder="Enter your email"
+      disabled={loading || disabled}
+      required
+      autoComplete="email" 
+    />
+  </motion.div>
+  {errors.email && (
+    <p className="text-red-400 text-sm mt-1 animate-pulse">
+      {errors.email}
+    </p>
+  )}
+</div>
+
       <div>
         <label className="block mb-2 font-semibold text-white/90">
           Password

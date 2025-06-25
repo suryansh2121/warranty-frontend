@@ -1,41 +1,23 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaTools } from "react-icons/fa";
 import Tilt from "react-parallax-tilt";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+import { useAuth } from "../context/AuthContext";
+
 
 const Welcome = () => {
-  const particlesInit = async (main) => {
-    await loadFull(main);
-  };
+  
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const particlesConfig = {
-    particles: {
-      number: { value: 50, density: { enable: true, value_area: 1500 } },
-      color: { value: ["#FFD700", "#FF69B4", "#4B0082"] },
-      shape: { type: "circle" },
-      opacity: { value: 0.7 },
-      size: { value: 4 },
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user]);
 
-      move: {
-        enable: true,
-        speed: 2,
-        direction: "none",
-        random: false,
-        straight: false,
-        out_mode: "out",
-      },
-    },
-    interactivity: {
-      events: {
-        onhover: { enable: true, mode: "repulse" },
-        onclick: { enable: true, mode: "push" },
-      },
-      modes: { repulse: { distance: 100 }, push: { particles_nb: 4 } },
-    },
-  };
+  
 
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -53,13 +35,6 @@ const Welcome = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-600 text-white flex justify-center items-center px-4 relative overflow-hidden">
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={particlesConfig}
-        className="absolute inset-0 z-[5] pointer-events-none"
-      />
-
       <div className="absolute top-0 left-0 transform -translate-x-1/3 -translate-y-1/3 z-0">
         <svg width="500" height="500" viewBox="0 0 200 200" fill="none">
           <path
