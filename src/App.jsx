@@ -17,7 +17,8 @@ import EditWarranty from "./pages/EditWarranty";
 import Welcome from "./pages/Welcome";
 import Spinner from "./components/Spinner";
 import WarrantyDetails from "./pages/WarrantyDetails";
-
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -37,6 +38,8 @@ function App() {
       <AuthProvider>
         <div className="min-h-screen bg-gray-100">
           <Routes>
+            <Route path="/reset-password/:token" element={<ResetPassword/>} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route
@@ -63,6 +66,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            
             <Route
               path="/warranty/:id"
               element={
