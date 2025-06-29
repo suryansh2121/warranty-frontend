@@ -76,13 +76,17 @@ function Login() {
           showGoogleLogin={true}
           disabled={isLoading}
         />
-        <p className="text-sm text-white/70 mt-4 text-center">
+      
+        <p className="text-sm text-white/70 mt-4 text-center justify-between gap-5 flex flex-col">
+        <span onClick={()=> navigate("/forgot-password")} className="text-yellow-300 hover:underline cursor-pointer">Forgot password</span>
+        <span>
           New user?{" "}
           <span
             onClick={() => navigate("/signup")}
             className="text-yellow-300 hover:underline cursor-pointer"
           >
             Create Account
+          </span>
           </span>
         </p>
 
