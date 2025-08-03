@@ -5,8 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
-import api from "../../services/api";
-
 import { useAuth } from "../../context/AuthContext";
 
 const loginSchema = z.object({
@@ -52,12 +50,7 @@ function AuthForm({
 
     try {
       loginSchema.parse({ email, password });
-      const res = await onSubmit(email, password);
-      if (res?.token) {
-        localStorage.setItem("token", res.token);
-        toast.success("Login successful!", { position: "top-right" });
-        navigate("/dashboard");
-      }
+      await onSubmit(email, password); // Let Login component handle navigation
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors = {};
@@ -76,9 +69,20 @@ function AuthForm({
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
-    await loginGoogle(credentialResponse.credential);
-    setLoading(false);
+    try {
+      setLoading(true);
+      await loginGoogle(credentialResponse.credential);
+      toast.success("Google login successful!", { position: "top-right" });
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error("Google login failed", { position: "top-right" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    toast.error("Google login failed", { position: "top-right" });
   };
 
   const formVariants = {
@@ -102,7 +106,6 @@ function AuthForm({
       initial="hidden"
       animate="visible"
     >
-      {" "}
       <AnimatePresence>
         {loading && (
           <motion.div
@@ -198,9 +201,7 @@ function AuthForm({
         >
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() =>
-              toast.error("Google login failed", { position: "top-right" })
-            }
+            onError={handleGoogleError}
             disabled={loading || disabled}
             theme="filled_blue"
             size="large"

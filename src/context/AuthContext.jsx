@@ -1,11 +1,6 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-  Children,
-} from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { createContext, useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import api from "../services/api";
 import {
   login as loginAPI,
@@ -24,12 +19,18 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     if (token) {
       api
-        .get("api/auth/me")
+        .get("api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((res) => {
           setUser(res.data.user);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Auth check failed:", err);
           localStorage.removeItem("token");
+          toast.error("Session expired, please log in again", {
+            position: "top-right",
+          });
         })
         .finally(() => {
           setLoading(false);
@@ -45,10 +46,9 @@ export const AuthProvider = ({ children }) => {
       const { token, user } = res.data;
       localStorage.setItem("token", token);
       setUser(user);
-      navigate("/dashboard", { replace: true });
+      return user; // Return user for Login component
     } catch (err) {
-      console.log("Login failed");
-      throw err;
+      throw err; // Let caller handle error
     }
   };
 
@@ -58,28 +58,37 @@ export const AuthProvider = ({ children }) => {
       const { token, user } = res.data;
       localStorage.setItem("token", token);
       setUser(user);
+      toast.success("Signup successful!", { position: "top-right" });
       navigate("/dashboard");
     } catch (err) {
-      console.log("signup failed", err);
-
+      console.error("Signup failed:", err);
+      toast.error(err.response?.data?.message || "Signup failed", {
+        position: "top-right",
+      });
+      throw err;
     }
   };
+
   const loginGoogle = async (googleToken) => {
     try {
       const res = await loginWithGoogleAPI(googleToken);
       const { token, user } = res.data;
       localStorage.setItem("token", token);
       setUser(user);
-      navigate("/dashboard");
+      // Navigation handled by caller (AuthForm)
     } catch (err) {
-      console.log(" There is some issue occurs", err);
+      console.error("Google login failed:", err);
+      toast.error(err.response?.data?.message || "Google login failed", {
+        position: "top-right",
+      });
+      throw err;
     }
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    setTimeout(() => navigate("/",{replace: true}), 0);
+    navigate("/", { replace: true });
   };
 
   const isAuthenticated = !!user;
@@ -100,4 +109,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 export const useAuth = () => useContext(AuthContext);

@@ -16,7 +16,7 @@ function Login() {
     if (user) {
       navigate("/dashboard", { replace: true });
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const handleSubmit = async (email, password) => {
     if (!email || !password) {
